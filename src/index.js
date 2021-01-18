@@ -199,10 +199,11 @@ export default class extends Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer)
       clearTimeout(this.autoplayTimer)
-    if (nextProps.index === this.props.index) return
-    this.setState(
-      this.initState(nextProps, this.props.index !== nextProps.index)
-    )
+    if (nextProps.index !== this.props.index) {
+      this.setState(
+        this.initState(nextProps, this.props.index !== nextProps.index)
+      )
+    }
   }
 
   componentDidMount() {
@@ -283,8 +284,9 @@ export default class extends Component {
       initState.height = height
     }
 
-    initState.offset[initState.dir] =
-      initState.dir === 'y' ? height * props.index : width * props.index
+    initState.offset[initState.dir] = initState.dir === 'y' 
+      ? height * (props.index + (props.loop ? 1 : 0)) 
+      : width * (props.index + (props.loop ? 1 : 0));
 
     this.internals = {
       ...this.internals,
